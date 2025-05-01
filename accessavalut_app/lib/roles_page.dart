@@ -12,6 +12,15 @@ class _RolesPageState extends State<RolesPage> {
 
   final TextEditingController _roleNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final List<String> _allPermissions = [
+    'Read',
+    'Write',
+    'Delete',
+    'Update',
+    'Manage Users',
+    'View Reports',
+  ];
+  String? _selectedPermission;
 
   @override
   void dispose() {
@@ -21,9 +30,127 @@ class _RolesPageState extends State<RolesPage> {
   }
 
   void _openAddRoleDialog() {
-    setState(() {
-      _showAddRoleDialog = true;
-    });
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: SizedBox(
+          width: 500,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 36),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Add Role',
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF0A2B4B),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 28, color: Color(0xFF0A2B4B)),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        _closeAddRoleDialog();
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                const Text('Role Name', style: TextStyle(fontSize: 22, color: Color(0xFF111827), fontWeight: FontWeight.w500)),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _roleNameController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: const Color(0xFFF9FAFB),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                  ),
+                  style: const TextStyle(fontSize: 18),
+                ),
+                const SizedBox(height: 24),
+                const Text('Description', style: TextStyle(fontSize: 22, color: Color(0xFF111827), fontWeight: FontWeight.w500)),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _descriptionController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: const Color(0xFFF9FAFB),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                  ),
+                  style: const TextStyle(fontSize: 18),
+                ),
+                const SizedBox(height: 24),
+                const Text('Permissions', style: TextStyle(fontSize: 22, color: Color(0xFF111827), fontWeight: FontWeight.w500)),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<String>(
+                  value: _selectedPermission,
+                  items: _allPermissions.map((permission) {
+                    return DropdownMenuItem<String>(
+                      value: permission,
+                      child: Text(permission),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedPermission = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: const Color(0xFFF9FAFB),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: 'Select permission',
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0A2B4B),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 18),
+                      ),
+                      onPressed: () {
+                        // TODO: Add logic to create role
+                        Navigator.of(context).pop();
+                        _closeAddRoleDialog();
+                      },
+                      child: const Text(
+                        'Create',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void _closeAddRoleDialog() {

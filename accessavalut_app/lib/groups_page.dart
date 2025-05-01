@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'add_group_page.dart';
 
 class GroupsPage extends StatelessWidget {
   const GroupsPage({Key? key}) : super(key: key);
@@ -65,7 +66,11 @@ class GroupsPage extends StatelessWidget {
                             ),
                             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => const AddGroupPage()),
+                            );
+                          },
                           child: const Text(
                             '+ Add Group',
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
