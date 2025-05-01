@@ -12,15 +12,6 @@ class _RolesPageState extends State<RolesPage> {
 
   final TextEditingController _roleNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final List<String> _allPermissions = [
-    'Read',
-    'Write',
-    'Delete',
-    'Update',
-    'Manage Users',
-    'View Reports',
-  ];
-  String? _selectedPermission;
 
   @override
   void dispose() {
@@ -94,32 +85,6 @@ class _RolesPageState extends State<RolesPage> {
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                   ),
                   style: const TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 24),
-                const Text('Permissions', style: TextStyle(fontSize: 22, color: Color(0xFF111827), fontWeight: FontWeight.w500)),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  value: _selectedPermission,
-                  items: _allPermissions.map((permission) {
-                    return DropdownMenuItem<String>(
-                      value: permission,
-                      child: Text(permission),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedPermission = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xFFF9FAFB),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: 'Select permission',
-                  ),
                 ),
                 const SizedBox(height: 32),
                 Row(
@@ -255,7 +220,7 @@ class _RolesPageState extends State<RolesPage> {
         if (_showAddRoleDialog)
           Positioned.fill(
             child: Container(
-              color: Colors.black.withOpacity(0.12),
+              color: Colors.black.withOpacity(0.1),
               child: Center(
                 child: Container(
                   width: 500,

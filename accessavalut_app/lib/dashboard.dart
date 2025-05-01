@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'users_page.dart';
 import 'roles_page.dart';
 import 'groups_page.dart';
+import 'settings_page.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -19,8 +20,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _DashboardMainContent(),
     UsersPage(),
     RolesPage(),
-    GroupsPage(), // <-- Make sure this is here!
-    Center(child: Text('Settings page coming soon...', style: TextStyle(fontSize: 24, color: Colors.grey))),
+    GroupsPage(),
+    SettingsPage(),
   ];
 
   @override
@@ -102,7 +103,7 @@ class _SidebarItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: selected
           ? BoxDecoration(
-              color: Colors.white.withOpacity(0.08),
+              color: Colors.black.withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),
             )
           : null,
@@ -176,7 +177,7 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color:  Colors.black.withOpacity(0.1),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

@@ -36,8 +36,6 @@ class _UsersPageState extends State<UsersPage> {
     },
   ];
 
-  int? _editingIndex;
-
   void _addUser(String name, String email, String role, String status) {
     setState(() {
       users.add({
@@ -168,7 +166,7 @@ class _UsersPageState extends State<UsersPage> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withOpacity(0.1),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
