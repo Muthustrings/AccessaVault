@@ -31,11 +31,14 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0A2B4B),
+        backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text('AccessaVault', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        centerTitle: false,
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF0A2B4B)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const Text('Security', style: TextStyle(color: Color(0xFF0A2B4B), fontWeight: FontWeight.bold)),
+        centerTitle: true,
       ),
       body: Center(
         child: SingleChildScrollView(

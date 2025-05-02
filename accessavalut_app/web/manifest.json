@@ -1,6 +1,6 @@
 {
-    "name": "accessavalut_clean",
-    "short_name": "accessavalut_clean",
+    "name": "accessavalut_app",
+    "short_name": "accessavalut_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

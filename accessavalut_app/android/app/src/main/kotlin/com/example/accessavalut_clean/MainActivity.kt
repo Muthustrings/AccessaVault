@@ -1,4 +1,4 @@
-package com.example.accessavalut_clean
+package com.example.accessavalut_app
 
 import io.flutter.embedding.android.FlutterActivity
 

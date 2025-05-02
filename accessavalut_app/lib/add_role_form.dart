@@ -120,7 +120,27 @@ class _AddRoleFormState extends State<AddRoleForm> {
                       ),
                     ),
                     onPressed: () {
-                      // TODO: Add role creation logic
+                      final String roleName = _roleNameController.text.trim();
+                      final String description = _descriptionController.text.trim();
+                      final String? permission = _selectedPermission;
+                      if (roleName.isEmpty || description.isEmpty || permission == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Please fill all fields and select a permission.')),
+                        );
+                        return;
+                      }
+                      // Here, credentials include permission
+                      final Map<String, dynamic> credentials = {
+                        'roleName': roleName,
+                        'description': description,
+                        'permission': permission,
+                      };
+                      // TODO: Save credentials to backend or state management
+                      print('Role credentials: $credentials');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Role added successfully!')),
+                      );
+                      Navigator.of(context).pop();
                     },
                     child: const Text(
                       'Add',

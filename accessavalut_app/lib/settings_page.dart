@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'general_settings_page.dart';
 import 'security_settings_page.dart';
 import 'notification_settings_page.dart';
-import 'billing_settings_page.dart';
+// ... existing code ...
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -14,32 +14,6 @@ class SettingsPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            color: const Color(0xFF0A2B4B),
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-            child: Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: const EdgeInsets.all(6),
-                  child: const Icon(Icons.shield, color: Color(0xFF0A2B4B), size: 28),
-                ),
-                const SizedBox(width: 16),
-                const Text(
-                  'AccessaVault',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.only(left: 48, top: 48, bottom: 16),
             child: const Text(
@@ -86,11 +60,12 @@ class SettingsPage extends StatelessWidget {
                       );
                     }),
                     _divider(),
-                    _settingsTile(context, 'Billing', onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const BillingSettingsPage()),
-                      );
-                    }),
+                    // Removed: _settingsTile(context, 'Billing', onTap: () {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => const BillingSettingsPage()),
+                    //   );
+                    // }),
                   ],
                 ),
               ),

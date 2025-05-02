@@ -31,12 +31,30 @@ class _AddUserFormState extends State<AddUserForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Remove the AppBar or top Row with logo and AccessaVault
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Add User',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0A2B4B),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Color(0xFF0A2B4B)),
+                  onPressed: () => Navigator.of(context).pop(),
+                  tooltip: 'Back',
+                ),
+              ],
+            ),
             const SizedBox(height: 24),
             const Text('Name', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF374151))),
             const SizedBox(height: 8),
