@@ -50,19 +50,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: const Text(
                           'A',
                           style: TextStyle(
-                            color: Color(0xFF0A2B4B),
+                            fontSize: 32,
                             fontWeight: FontWeight.bold,
-                            fontSize: 24,
+                            color: Color(0xFF0A2B4B),
                           ),
                         ),
                       ),
                       const SizedBox(width: 12),
-                      const Text(
-                        'AccessaVault',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                      const Flexible(
+                        child: Text(
+                          'AccessaValut',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ],
@@ -75,6 +78,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _SidebarItem(icon: Icons.groups_outlined, label: 'Groups', selected: _selectedIndex == 3, onTap: () { setState(() { _selectedIndex = 3; }); }),
                 _SidebarItem(icon: Icons.settings_outlined, label: 'Settings', selected: _selectedIndex == 4, onTap: () { setState(() { _selectedIndex = 4; }); }),
                 const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 24, bottom: 32, top: 0, right: 24),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: ListTile(
+                      leading: const Icon(Icons.logout, color: Colors.white),
+                      title: const Text('Logout', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500)),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                      onTap: () async {
+                        final shouldLogout = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Are you sure you want to Logout?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: const Text('No'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                                child: const Text('Yes'),
+                              ),
+                            ],
+                          ),
+                        );
+                        if (shouldLogout == true) {
+                          // Ensure dialog is closed before navigating
+                          Navigator.of(context, rootNavigator: true).pushReplacementNamed('/login');
+                        }
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

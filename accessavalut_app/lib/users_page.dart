@@ -15,45 +15,51 @@ class _UsersPageState extends State<UsersPage> {
       'email': 'tom.cook@example.com',
       'role': 'Admin',
       'status': 'Active',
+      'group': 'Marketing',
     },
     {
       'name': 'Lindsay Walton',
       'email': 'lindsay.walton@example.com',
       'role': 'User',
       'status': 'Active',
+      'group': 'Sales',
     },
     {
       'name': 'Courtney Henry',
       'email': 'courtney.henry@example.com',
       'role': 'User',
       'status': 'Inactive',
+      'group': 'Development',
     },
     {
       'name': 'Kathryn Murphy',
       'email': 'kathryn.murphy@example.com',
       'role': 'User',
       'status': 'Active',
+      'group': 'Support',
     },
   ];
 
-  void _addUser(String name, String email, String role, String status) {
+  void _addUser(String name, String email, String role, String status, String group) {
     setState(() {
       users.add({
         'name': name,
         'email': email,
         'role': role,
         'status': status,
+        'group': group,
       });
     });
   }
 
-  void _editUser(int index, String name, String email, String role, String status) {
+  void _editUser(int index, String name, String email, String role, String status, String group) {
     setState(() {
       users[index] = {
         'name': name,
         'email': email,
         'role': role,
         'status': status,
+        'group': group,
       };
     });
   }
@@ -64,17 +70,19 @@ class _UsersPageState extends State<UsersPage> {
     });
   }
 
+  // Show dialog for adding a new user
   void _showAddUserDialog() {
     showDialog(
       context: context,
       builder: (context) => AddUserForm(
-        onAdd: (name, email, role, status) {
-          _addUser(name, email, role, status);
+        onAdd: (name, email, role, status, group) {
+          _addUser(name, email, role, status, group);
         },
       ),
     );
   }
 
+  // Show dialog for editing an existing user
   void _showEditUserDialog(int index) {
     final user = users[index];
     showDialog(
@@ -84,8 +92,9 @@ class _UsersPageState extends State<UsersPage> {
         initialEmail: user['email'],
         initialRole: user['role'],
         initialStatus: user['status'],
-        onAdd: (name, email, role, status) {
-          _editUser(index, name, email, role, status);
+        initialGroup: user['group'],
+        onAdd: (name, email, role, status, group) {
+          _editUser(index, name, email, role, status, group);
         },
       ),
     );
