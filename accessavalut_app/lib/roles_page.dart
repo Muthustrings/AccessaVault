@@ -1,4 +1,7 @@
+
 import 'package:flutter/material.dart';
+import 'common_colors.dart';
+import 'common_text_styles.dart';
 
 class RolesPage extends StatefulWidget {
   const RolesPage({Key? key}) : super(key: key);
@@ -168,11 +171,11 @@ class _RolesPageState extends State<RolesPage> {
                 const SizedBox(height: 32),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: CommonColors.card,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.03),
+                        color: CommonColors.shadow,
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -226,13 +229,13 @@ class _RolesPageState extends State<RolesPage> {
                   width: 500,
                   padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 36),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: CommonColors.card,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
-                        blurRadius: 24,
-                        offset: const Offset(0, 8),
+                        color: CommonColors.shadow,
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
@@ -245,11 +248,7 @@ class _RolesPageState extends State<RolesPage> {
                         children: [
                           const Text(
                             'Add Role',
-                            style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF0A2B4B),
-                            ),
+                            style: CommonTextStyles.cardTitle,
                           ),
                           IconButton(
                             icon: const Icon(Icons.close, size: 28, color: Color(0xFF0A2B4B)),
@@ -258,7 +257,7 @@ class _RolesPageState extends State<RolesPage> {
                         ],
                       ),
                       const SizedBox(height: 32),
-                      const Text('Role Name', style: TextStyle(fontSize: 22, color: Color(0xFF111827), fontWeight: FontWeight.w500)),
+                      const Text('Role Name', style: CommonTextStyles.cardTitle),
                       const SizedBox(height: 8),
                       TextField(
                         controller: _roleNameController,
@@ -274,7 +273,7 @@ class _RolesPageState extends State<RolesPage> {
                         style: const TextStyle(fontSize: 18),
                       ),
                       const SizedBox(height: 24),
-                      const Text('Description', style: TextStyle(fontSize: 22, color: Color(0xFF111827), fontWeight: FontWeight.w500)),
+                      const Text('Description', style: CommonTextStyles.cardTitle),
                       const SizedBox(height: 8),
                       TextField(
                         controller: _descriptionController,
@@ -296,7 +295,7 @@ class _RolesPageState extends State<RolesPage> {
                         children: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF0A2B4B),
+                              backgroundColor: CommonColors.primary,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),

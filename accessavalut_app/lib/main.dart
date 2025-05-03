@@ -16,9 +16,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const LoginScreen(),
+      initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
+        '/signup': (context) => const SignUpScreen(),
       },
     );
   }
@@ -66,13 +68,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       body: Center(
@@ -88,7 +103,7 @@ class LoginScreen extends StatelessWidget {
                   blurRadius: 20,
                   spreadRadius: 2,
                   offset: const Offset(0, 8),
-                  color: Colors.black.withOpacity(0.05),
+                  color: Color(0x0D000000),
                 ),
               ],
             ),
@@ -215,9 +230,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (_) => const DashboardScreen()),
-                          );
+                          Navigator.of(context).pushReplacementNamed('/dashboard');
                         }
                       },
                       child: const Text(
@@ -235,7 +248,7 @@ class LoginScreen extends StatelessWidget {
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 12),
                         child: Text(
-                          'Or sign in with',
+                          '',
                           style: TextStyle(color: Color(0xFF6B7280)),
                         ),
                       ),
@@ -245,26 +258,6 @@ class LoginScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  SizedBox(
-                    height: 52,
-                    child: OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Color(0xFFE5E7EB)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      icon: Image.network(
-                        'https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png',
-                        height: 24,
-                      ),
-                      label: const Text(
-                        'Sign in with Google',
-                        style: TextStyle(fontSize: 18, color: Color(0xFF374151)),
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
                   const SizedBox(height: 24),
                   Center(
                     child: RichText(
@@ -275,9 +268,7 @@ class LoginScreen extends StatelessWidget {
                           WidgetSpan(
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(builder: (_) => const SignUpScreen()),
-                                );
+                                Navigator.of(context).pushReplacementNamed('/signup');
                               },
                               child: const Text(
                                 'Sign up',

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'general_settings_page.dart';
 import 'security_settings_page.dart';
 import 'notification_settings_page.dart';
-// ... existing code ...
+import 'common_colors.dart';
+import 'common_text_styles.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: CommonColors.accent,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -18,11 +19,7 @@ class SettingsPage extends StatelessWidget {
             padding: const EdgeInsets.only(left: 48, top: 48, bottom: 16),
             child: const Text(
               'Settings',
-              style: TextStyle(
-                fontSize: 48,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF0A2B4B),
-              ),
+              style: CommonTextStyles.heading1,
             ),
           ),
           Expanded(
@@ -30,11 +27,11 @@ class SettingsPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 48),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: CommonColors.card,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color:  Colors.black.withOpacity(0.1),
+                      color: CommonColors.shadow,
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -86,7 +83,7 @@ class SettingsPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
       ),
-      trailing: const Icon(Icons.chevron_right, color: Color(0xFF223046)),
+      trailing: const Icon(Icons.chevron_right, color: CommonColors.textPrimary),
       contentPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
       onTap: onTap ?? () {
         if (title == 'General') {

@@ -10,8 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^6.0.5
-  google_sign_in: ^6.1.5
-
+# Remove the shared_preferences dependency
 dev_dependencies:
   flutter_test:
     sdk: flutter

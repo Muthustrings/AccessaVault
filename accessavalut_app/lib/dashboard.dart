@@ -5,6 +5,9 @@ import 'roles_page.dart';
 import 'groups_page.dart';
 import 'settings_page.dart';
 
+import 'common_colors.dart';
+import 'common_text_styles.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -27,13 +30,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: CommonColors.card,
       body: Row(
         children: [
           // Sidebar
           Container(
             width: 260,
-            color: const Color(0xFF0A2B4B),
+            color: CommonColors.sidebarBg,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -43,29 +46,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       Container(
                         decoration: const BoxDecoration(
-                          color: Colors.white,
+                          color: CommonColors.card,
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(10),
                         child: const Text(
                           'A',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF0A2B4B),
-                          ),
+                          style: CommonTextStyles.heading2,
                         ),
                       ),
                       const SizedBox(width: 12),
                       const Flexible(
                         child: Text(
                           'AccessaValut',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          style: CommonTextStyles.sidebarTitle,
                         ),
                       ),
                     ],
@@ -83,8 +77,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: ListTile(
-                      leading: const Icon(Icons.logout, color: Colors.white),
-                      title: const Text('Logout', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500)),
+                      leading: const Icon(Icons.logout, color: CommonColors.logoutIcon),
+                      title: const Text('Logout', style: CommonTextStyles.logout),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                       onTap: () async {
                         final shouldLogout = await showDialog<bool>(
@@ -162,39 +156,64 @@ class _SidebarItem extends StatelessWidget {
 class _DashboardMainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Dashboard',
-            style: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF0A2B4B),
+    int totalUsers = 4;
+    int activeUsers = 0;
+    int totalRoles = 4;
+    int totalGroups = 4;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isNarrow = constraints.maxWidth < 900;
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: constraints.maxWidth),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 32),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Dashboard',
+                        style: CommonTextStyles.heading1,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+                  isNarrow
+                      ? SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              _StatCard(title: 'TOTAL USERS', value: totalUsers.toString()),
+                              const SizedBox(width: 16),
+                              _StatCard(title: 'ACTIVE USERS', value: activeUsers.toString()),
+                              const SizedBox(width: 16),
+                              _StatCard(title: 'ROLES', value: totalRoles.toString()),
+                              const SizedBox(width: 16),
+                              _StatCard(title: 'GROUPS', value: totalGroups.toString()),
+                            ],
+                          ),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _StatCard(title: 'TOTAL USERS', value: totalUsers.toString()),
+                            _StatCard(title: 'ACTIVE USERS', value: activeUsers.toString()),
+                            _StatCard(title: 'ROLES', value: totalRoles.toString()),
+                            _StatCard(title: 'GROUPS', value: totalGroups.toString()),
+                          ],
+                        ),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 36),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _StatCard(title: 'TOTAL USERS', value: '152'),
-              const SizedBox(width: 32),
-              _StatCard(title: 'ACTIVE USERS', value: '124'),
-            ],
-          ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _StatCard(title: 'ROLES', value: '8'),
-              const SizedBox(width: 32),
-              _StatCard(title: 'GROUPS', value: '5'),
-            ],
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -212,11 +231,11 @@ class _StatCard extends StatelessWidget {
       // height: 120,
       constraints: BoxConstraints(minHeight: 100),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: CommonColors.card,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color:  Colors.black.withOpacity(0.1),
+            color: CommonColors.shadow,
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -230,21 +249,13 @@ class _StatCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              color: Color(0xFF6B7280),
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-            ),
+            style: CommonTextStyles.cardTitle,
           ),
           const SizedBox(height: 10),
           Flexible(
             child: Text(
               value,
-              style: const TextStyle(
-                color: Color(0xFF0A2B4B),
-                fontWeight: FontWeight.bold,
-                fontSize: 40,
-              ),
+              style: CommonTextStyles.cardValue,
               overflow: TextOverflow.ellipsis,
             ),
           ),

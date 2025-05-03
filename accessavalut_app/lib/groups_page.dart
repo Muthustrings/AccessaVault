@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
 import 'add_group_page.dart';
+import 'common_colors.dart';
+import 'common_text_styles.dart';
+import 'reusable_widgets.dart';
 
-class GroupsPage extends StatelessWidget {
+class GroupsPage extends StatefulWidget {
   const GroupsPage({Key? key}) : super(key: key);
+
+  @override
+  _GroupsPageState createState() => _GroupsPageState();
+}
+
+class _GroupsPageState extends State<GroupsPage> {
+  List<Map<String, String>> _groups = [
+    {'name': 'Marketing', 'description': 'Marketing Team'},
+    {'name': 'Sales', 'description': 'Sales Team'},
+    {'name': 'Development', 'description': 'Development Team'},
+    {'name': 'Support', 'description': 'Support Team'},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    // No need to load groups from storage
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +38,12 @@ class GroupsPage extends StatelessWidget {
             const SizedBox(height: 32),
             const Text(
               'Groups',
-              style: TextStyle(
-                fontSize: 48,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF0A2B4B),
-              ),
+              style: CommonTextStyles.heading1,
             ),
             const SizedBox(height: 32),
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: CommonColors.card,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -43,69 +60,38 @@ class GroupsPage extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.search, color: Color(0xFF6B7280)),
-                              hintText: 'Search groups',
-                              filled: true,
-                              fillColor: const Color(0xFFF9FAFB),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                            ),
+                          child: ReusableSearchField(
+                            hintText: 'Search groups',
                           ),
                         ),
                         const SizedBox(width: 16),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF0A2B4B),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).push(
+                        ReusableElevatedButton(
+                          text: '+ Add Group',
+                          onPressed: () async {
+                            final result = await Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) => const AddGroupPage()),
                             );
+                            if (result != null && result is Map<String, String>) {
+                              setState(() {
+                                _groups.add(result);
+                              });
+                            }
                           },
-                          child: const Text(
-                            '+ Add Group',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                          ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 24),
+                    ReusableTableHeader(
+                      headers: const ['Name', 'Description'],
+                      columnWidths: const [FlexColumnWidth(2), FlexColumnWidth(3)],
+                    ),
                     Table(
                       columnWidths: const {
                         0: FlexColumnWidth(2),
                         1: FlexColumnWidth(3),
                       },
-                      border: TableBorder.symmetric(
-                        inside: const BorderSide(color: Color(0xFFE5E7EB)),
-                        outside: BorderSide.none,
-                      ),
                       children: [
-                        const TableRow(
-                          decoration: BoxDecoration(color: Color(0xFFF3F4F6)),
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-                              child: Text('Name', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFF374151))),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-                              child: Text('Description', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFF374151))),
-                            ),
-                          ],
-                        ),
-                        _groupRow('Marketing', 'Marketing Team'),
-                        _groupRow('Sales', 'Sales Team'),
-                        _groupRow('Development', 'Development Team'),
-                        _groupRow('Support', 'Support Team'),
+                        ..._groups.map((group) => _groupRow(group['name'] ?? '', group['description'] ?? '')),
                       ],
                     ),
                   ],

@@ -7,7 +7,8 @@ class AddUserForm extends StatefulWidget {
   final String? initialRole;
   final String? initialStatus;
   final String? initialGroup;
-  const AddUserForm({Key? key, this.onAdd, this.initialName, this.initialEmail, this.initialRole, this.initialStatus, this.initialGroup}) : super(key: key);
+  final List<String> groupList;
+  const AddUserForm({Key? key, this.onAdd, this.initialName, this.initialEmail, this.initialRole, this.initialStatus, this.initialGroup, required this.groupList}) : super(key: key);
 
   @override
   State<AddUserForm> createState() => _AddUserFormState();
@@ -28,7 +29,7 @@ class _AddUserFormState extends State<AddUserForm> {
     _emailController = TextEditingController(text: widget.initialEmail ?? '');
     _role = widget.initialRole ?? 'User';
     _status = widget.initialStatus ?? 'Active';
-    _group = widget.initialGroup ?? 'Marketing';
+    _group = widget.initialGroup ?? (widget.groupList.isNotEmpty ? widget.groupList[0] : '');
   }
 
   @override
@@ -159,16 +160,11 @@ class _AddUserFormState extends State<AddUserForm> {
               const Text('Group', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF374151))),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                value: _group,
-                items: const [
-                  DropdownMenuItem(value: 'Marketing', child: Text('Marketing')),
-                  DropdownMenuItem(value: 'Sales', child: Text('Sales')),
-                  DropdownMenuItem(value: 'Development', child: Text('Development')),
-                  DropdownMenuItem(value: 'Support', child: Text('Support')),
-                ],
+                value: _group.isNotEmpty ? _group : null,
+                items: widget.groupList.map((g) => DropdownMenuItem(value: g, child: Text(g))).toList(),
                 onChanged: (value) {
                   setState(() {
-                    _group = value ?? 'Marketing';
+                    _group = value ?? (widget.groupList.isNotEmpty ? widget.groupList[0] : '');
                   });
                 },
                 decoration: InputDecoration(

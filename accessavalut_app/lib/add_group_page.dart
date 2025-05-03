@@ -1,20 +1,38 @@
 import 'package:flutter/material.dart';
+import 'common_colors.dart';
+import 'common_text_styles.dart';
+import 'reusable_widgets.dart';
 
-class AddGroupPage extends StatelessWidget {
-  const AddGroupPage({Key? key}) : super(key: key);
+class AddGroupPage extends StatefulWidget {
+  const AddGroupPage({super.key});
+
+  @override
+  _AddGroupPageState createState() => _AddGroupPageState();
+}
+
+class _AddGroupPageState extends State<AddGroupPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: CommonColors.card,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF0A2B4B)),
+          icon: const Icon(Icons.arrow_back, color: CommonColors.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Add Group', style: TextStyle(color: Color(0xFF0A2B4B), fontWeight: FontWeight.bold)),
+        title: const Text('Add Group', style: CommonTextStyles.heading2),
         centerTitle: true,
       ),
       body: Center(
@@ -24,107 +42,66 @@ class AddGroupPage extends StatelessWidget {
             child: Container(
               width: 500,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: CommonColors.card,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color:  Colors.black.withOpacity(0.1),
+                    color: Color(0x1A000000),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.all(36),
+                padding: const EdgeInsets.all(32),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.group_add, color: Color(0xFF0A2B4B), size: 36),
-                        const SizedBox(width: 12),
-                        const Text('Add Group', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFF0A2B4B))),
-                      ],
+                    const Text('Group Name', style: CommonTextStyles.cardTitle),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter group name',
+                        filled: true,
+                        fillColor: CommonColors.accent,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text('Description', style: CommonTextStyles.cardTitle),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _descController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter group description',
+                        filled: true,
+                        fillColor: CommonColors.accent,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                      ),
                     ),
                     const SizedBox(height: 32),
-                    const Text('Group Name', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Color(0xFF0A2B4B))),
-                    const SizedBox(height: 8),
-                    const TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    const Text('Description', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Color(0xFF0A2B4B))),
-                    const SizedBox(height: 8),
-                    const TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    const Text('Assign Roles', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Color(0xFF0A2B4B))),
-                    const SizedBox(height: 8),
-                    DropdownButtonFormField<String>(
-                      items: const [
-                        DropdownMenuItem(child: Text('Role 1'), value: 'Role 1'),
-                        DropdownMenuItem(child: Text('Role 2'), value: 'Role 2'),
-                      ],
-                      onChanged: (value) {},
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    const Text('Add Users', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Color(0xFF0A2B4B))),
-                    const SizedBox(height: 8),
-                    DropdownButtonFormField<String>(
-                      items: const [
-                        DropdownMenuItem(child: Text('User 1'), value: 'User 1'),
-                        DropdownMenuItem(child: Text('User 2'), value: 'User 2'),
-                      ],
-                      onChanged: (value) {},
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 36),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(
-                          width: 120,
-                          height: 48,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Color(0xFF0A2B4B)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('Cancel', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF0A2B4B))),
-                          ),
-                        ),
-                        const SizedBox(width: 24),
-                        SizedBox(
-                          width: 120,
-                          height: 48,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF0A2B4B),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('Add', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                          ),
+                        ReusableElevatedButton(
+                          text: 'Add Group',
+                          onPressed: () {
+                            if (_nameController.text.isNotEmpty && _descController.text.isNotEmpty) {
+                              Navigator.of(context).pop({
+                                'name': _nameController.text,
+                                'description': _descController.text,
+                              });
+                            }
+                          },
                         ),
                       ],
                     ),
