@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AddRoleForm extends StatefulWidget {
-  const AddRoleForm({Key? key}) : super(key: key);
+  const AddRoleForm({super.key});
   @override
   _AddRoleFormState createState() => _AddRoleFormState();
 }
@@ -23,133 +23,139 @@ class _AddRoleFormState extends State<AddRoleForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 32),
-              const Text(
-                'Add Role',
-                style: TextStyle(
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0A2B4B),
-                ),
-              ),
-              const SizedBox(height: 40),
-              const Text(
-                'Role Name',
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Color(0xFF111827),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _roleNameController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 80),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 1000),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 32),
+                  const Text(
+                    'Add Role',
+                    style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0A2B4B),
+                    ),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Description',
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Color(0xFF111827),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _descriptionController,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  const SizedBox(height: 40),
+                  const Text(
+                    'Role Name',
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Color(0xFF111827),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Permissions',
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Color(0xFF111827),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: _selectedPermission,
-                items: _permissions
-                    .map((perm) => DropdownMenuItem(
-                          value: perm,
-                          child: Text(perm),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedPermission = value;
-                  });
-                },
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _roleNameController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                    ),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                ),
-              ),
-              const SizedBox(height: 40),
-              Center(
-                child: SizedBox(
-                  width: 160,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF195A8C),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Description',
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Color(0xFF111827),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _descriptionController,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Permissions',
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Color(0xFF111827),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  DropdownButtonFormField<String>(
+                    value: _selectedPermission,
+                    items: _permissions
+                        .map((perm) => DropdownMenuItem(
+                              value: perm,
+                              child: Text(perm),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedPermission = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  Center(
+                    child: SizedBox(
+                      width: 160,
+                      height: 48,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF195A8C),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          final String roleName = _roleNameController.text.trim();
+                          final String description = _descriptionController.text.trim();
+                          final String? permission = _selectedPermission;
+                          if (roleName.isEmpty || description.isEmpty || permission == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Please fill all fields and select a permission.')),
+                            );
+                            return;
+                          }
+                          // Here, credentials include permission
+                          final Map<String, dynamic> credentials = {
+                            'roleName': roleName,
+                            'description': description,
+                            'permission': permission,
+                          };
+                          // TODO: Save credentials to backend or state management
+                          print('Role credentials: $credentials');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Role added successfully!')),
+                          );
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          'Add',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                        ),
                       ),
                     ),
-                    onPressed: () {
-                      final String roleName = _roleNameController.text.trim();
-                      final String description = _descriptionController.text.trim();
-                      final String? permission = _selectedPermission;
-                      if (roleName.isEmpty || description.isEmpty || permission == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Please fill all fields and select a permission.')),
-                        );
-                        return;
-                      }
-                      // Here, credentials include permission
-                      final Map<String, dynamic> credentials = {
-                        'roleName': roleName,
-                        'description': description,
-                        'permission': permission,
-                      };
-                      // TODO: Save credentials to backend or state management
-                      print('Role credentials: $credentials');
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Role added successfully!')),
-                      );
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Add',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
+
 import 'common_colors.dart';
-import 'common_text_styles.dart';
 
 class RolesPage extends StatefulWidget {
   const RolesPage({Key? key}) : super(key: key);
@@ -11,10 +11,17 @@ class RolesPage extends StatefulWidget {
 }
 
 class _RolesPageState extends State<RolesPage> {
-  bool _showAddRoleDialog = false;
+  List<RoleResponse> _roles = [
+    RoleResponse(id: '1', name: 'Admin', description: 'Administrator role', users: 2),
+    RoleResponse(id: '2', name: 'User', description: 'Regular user role', users: 5),
+  ];
+  bool _isLoading = false;
+  String? _error;
 
+  // Add/Edit Dialog Controllers
   final TextEditingController _roleNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  String? _editingRoleId;
 
   @override
   void dispose() {
@@ -23,322 +30,207 @@ class _RolesPageState extends State<RolesPage> {
     super.dispose();
   }
 
-  void _openAddRoleDialog() {
-    showDialog(
+  Future<void> _showRoleDialog({RoleResponse? role}) async {
+    _roleNameController.text = role?.name ?? '';
+    _descriptionController.text = role?.description ?? '';
+    _editingRoleId = role?.id;
+    final isEdit = role != null;
+    await showDialog(
       context: context,
-      builder: (context) => Dialog(
+      builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: SizedBox(
-          width: 500,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 36),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Add Role',
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF0A2B4B),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close, size: 28, color: Color(0xFF0A2B4B)),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        _closeAddRoleDialog();
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
-                const Text('Role Name', style: TextStyle(fontSize: 22, color: Color(0xFF111827), fontWeight: FontWeight.w500)),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _roleNameController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xFFF9FAFB),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                  ),
-                  style: const TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 24),
-                const Text('Description', style: TextStyle(fontSize: 22, color: Color(0xFF111827), fontWeight: FontWeight.w500)),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _descriptionController,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xFFF9FAFB),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                  ),
-                  style: const TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 32),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0A2B4B),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 18),
-                      ),
-                      onPressed: () {
-                        // TODO: Add logic to create role
-                        Navigator.of(context).pop();
-                        _closeAddRoleDialog();
-                      },
-                      child: const Text(
-                        'Create',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+        title: Text(isEdit ? 'Edit Role' : 'Add Role', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+        content: SizedBox(
+          width: 400,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _roleNameController,
+                decoration: const InputDecoration(labelText: 'Role Name'),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _descriptionController,
+                decoration: const InputDecoration(labelText: 'Description'),
+                maxLines: 3,
+              ),
+            ],
           ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: CommonColors.primary,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            onPressed: () async {
+              final name = _roleNameController.text.trim();
+              final desc = _descriptionController.text.trim();
+              if (name.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Role name cannot be empty')));
+                return;
+              }
+              Navigator.of(context).pop();
+              if (isEdit) {
+                await _updateRole(_editingRoleId!, name, desc);
+              } else {
+                await _addRole(name, desc);
+              }
+            },
+            child: Text(isEdit ? 'Save' : 'Create'),
+          ),
+        ],
       ),
     );
+    _roleNameController.clear();
+    _descriptionController.clear();
+    _editingRoleId = null;
   }
 
-  void _closeAddRoleDialog() {
+  Future<void> _addRole(String name, String description) async {
     setState(() {
-      _showAddRoleDialog = false;
-      _roleNameController.clear();
-      _descriptionController.clear();
+      _roles.add(RoleResponse(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        name: name,
+        description: description,
+        users: 0,
+      ));
     });
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Role created successfully')));
+  }
+
+  Future<void> _updateRole(String id, String name, String description) async {
+    setState(() {
+      final idx = _roles.indexWhere((r) => r.id == id);
+      if (idx != -1) {
+        _roles[idx] = RoleResponse(
+          id: id,
+          name: name,
+          description: description,
+          users: _roles[idx].users,
+        );
+      }
+    });
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Role updated successfully')));
+  }
+
+  Future<void> _deleteRole(String id) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Role'),
+        content: const Text('Are you sure you want to delete this role?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancel')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true) {
+      setState(() {
+        _roles.removeWhere((r) => r.id == id);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Role deleted successfully')));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          color: const Color(0xFFF9FAFB),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      backgroundColor: const Color(0xFFF9FAFB),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(height: 32),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Roles',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF0A2B4B),
-                      ),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0A2B4B),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                      ),
-                      onPressed: _openAddRoleDialog,
-                      child: const Text(
-                        '+ Add Role',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ],
+                const Text('Roles', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFF0A2B4B))),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CommonColors.primary,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                  ),
+                  onPressed: () => _showRoleDialog(),
+                  child: const Text('+ Add Role', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
                 ),
-                const SizedBox(height: 32),
-                Container(
+              ],
+            ),
+            const SizedBox(height: 32),
+            if (_isLoading)
+              const Center(child: CircularProgressIndicator()),
+            if (_error != null)
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(_error!, style: const TextStyle(color: Colors.red)),
+              ),
+            if (!_isLoading && _error == null)
+              Expanded(
+                child: Container(
                   decoration: BoxDecoration(
                     color: CommonColors.card,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
-                      BoxShadow(
-                        color: CommonColors.shadow,
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
+                      BoxShadow(color: CommonColors.shadow, blurRadius: 8, offset: const Offset(0, 2)),
                     ],
                   ),
-                  child: Table(
-                    columnWidths: const {
-                      0: FlexColumnWidth(2),
-                      1: FlexColumnWidth(3),
-                      2: FlexColumnWidth(1),
-                    },
-                    border: TableBorder.symmetric(
-                      inside: const BorderSide(color: Color(0xFFE5E7EB)),
-                      outside: BorderSide.none,
-                    ),
-                    children: [
-                      const TableRow(
-                        decoration: BoxDecoration(color: Color(0xFFF3F4F6)),
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-                            child: Text('Name', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFF374151))),
+                  child: _roles.isEmpty
+                      ? const Center(child: Text('No roles found.'))
+                      : SingleChildScrollView(
+                          child: DataTable(
+                            columns: const [
+                              DataColumn(label: Text('Name', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFF374151)))),
+                              DataColumn(label: Text('Description', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFF374151)))),
+                              DataColumn(label: Text('Users', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFF374151)))),
+                              DataColumn(label: Text('Actions', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFF374151)))),
+                            ],
+                            rows: _roles.map((role) => DataRow(cells: [
+                              DataCell(Text(role.name, style: const TextStyle(fontSize: 17, color: Color(0xFF111827)))),
+                              DataCell(Text(role.description, style: const TextStyle(fontSize: 17, color: Color(0xFF6B7280)))),
+                              DataCell(Text(role.users.toString(), style: const TextStyle(fontSize: 17, color: Color(0xFF6B7280)))),
+                              DataCell(Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit, color: Color(0xFF2563EB)),
+                                    tooltip: 'Edit',
+                                    onPressed: () => _showRoleDialog(role: role),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, color: Color(0xFFB91C1C)),
+                                    tooltip: 'Delete',
+                                    onPressed: () => _deleteRole(role.id),
+                                  ),
+                                ],
+                              )),
+                            ])).toList(),
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-                            child: Text('Description', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFF374151))),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-                            child: Text('Users', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFF374151))),
-                          ),
-                        ],
-                      ),
-                      _roleRow('Administrator', 'Full access to the system', '3'),
-                      _roleRow('Manager', 'Manage users and groups', '7'),
-                      _roleRow('Editor', 'Edit content', '12'),
-                      _roleRow('Viewer', 'View content only', '25'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (_showAddRoleDialog)
-          Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0.1),
-              child: Center(
-                child: Container(
-                  width: 500,
-                  padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 36),
-                  decoration: BoxDecoration(
-                    color: CommonColors.card,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: CommonColors.shadow,
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Add Role',
-                            style: CommonTextStyles.cardTitle,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close, size: 28, color: Color(0xFF0A2B4B)),
-                            onPressed: _closeAddRoleDialog,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 32),
-                      const Text('Role Name', style: CommonTextStyles.cardTitle),
-                      const SizedBox(height: 8),
-                      TextField(
-                        controller: _roleNameController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: const Color(0xFFF9FAFB),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                         ),
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(height: 24),
-                      const Text('Description', style: CommonTextStyles.cardTitle),
-                      const SizedBox(height: 8),
-                      TextField(
-                        controller: _descriptionController,
-                        maxLines: 3,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: const Color(0xFFF9FAFB),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                        ),
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: CommonColors.primary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 18),
-                            ),
-                            onPressed: () {
-                              // TODO: Add logic to create role
-                              _closeAddRoleDialog();
-                            },
-                            child: const Text(
-                              'Create',
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
                 ),
               ),
-            ),
-          ),
-      ],
+          ],
+        ),
+      ),
     );
   }
+}
 
-  TableRow _roleRow(String name, String description, String users) {
-    return TableRow(
-      decoration: const BoxDecoration(color: Colors.transparent),
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-          child: Text(name, style: const TextStyle(fontSize: 17, color: Color(0xFF111827))),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-          child: Text(description, style: const TextStyle(fontSize: 17, color: Color(0xFF6B7280))),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-          child: Text(users, style: const TextStyle(fontSize: 17, color: Color(0xFF6B7280))),
-        ),
-      ],
-    );
-  }
+class RoleResponse {
+  final String id;
+  final String name;
+  final String description;
+  final int users;
+
+  RoleResponse({required this.id, required this.name, required this.description, required this.users});
 }

@@ -11,49 +11,16 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
-  List<Map<String, String>> users = [
-    {
-      'name': 'Tom Cook',
-      'email': 'tom.cook@example.com',
-      'role': 'Admin',
-      'status': 'Active',
-      'group': 'Marketing',
-    },
-    {
-      'name': 'Lindsay Walton',
-      'email': 'lindsay.walton@example.com',
-      'role': 'User',
-      'status': 'Active',
-      'group': 'Sales',
-    },
-    {
-      'name': 'Courtney Henry',
-      'email': 'courtney.henry@example.com',
-      'role': 'User',
-      'status': 'Inactive',
-      'group': 'Development',
-    },
-    {
-      'name': 'Kathryn Murphy',
-      'email': 'kathryn.murphy@example.com',
-      'role': 'User',
-      'status': 'Active',
-      'group': 'Support',
-    },
-  ];
+  List<Map<String, String>> users = [];
+  List<Map<String, String>> _groups = [];
 
-  List<Map<String, String>> _groups = [
-    {'name': 'Marketing', 'description': 'Marketing'},
-    {'name': 'Sales', 'description': 'Sales'},
-    {'name': 'Development', 'description': 'Development'},
-    {'name': 'Support', 'description': 'Support'},
-  ];
-
-  void _addUser(String name, String email, String role, String status, String group) {
+  void _addUser(String name, String username, String email, String password, String phone, String role, String status, String group) {
     setState(() {
       users.add({
-        'name': name,
+        'username': username,
         'email': email,
+        'password': password,
+        'phone': phone,
         'role': role,
         'status': status,
         'group': group,
@@ -61,11 +28,13 @@ class _UsersPageState extends State<UsersPage> {
     });
   }
 
-  void _editUser(int index, String name, String email, String role, String status, String group) {
+  void _editUser(int index, String name, String username, String email, String password, String phone, String role, String status, String group) {
     setState(() {
       users[index] = {
-        'name': name,
+        'username': username,
         'email': email,
+        'password': password,
+        'phone': phone,
         'role': role,
         'status': status,
         'group': group,
@@ -79,15 +48,14 @@ class _UsersPageState extends State<UsersPage> {
     });
   }
 
-  // Show dialog for adding a new user
   void _showAddUserDialog() {
     showDialog(
       context: context,
       builder: (context) => AddUserForm(
-        onAdd: (name, email, role, status, group) {
-          _addUser(name, email, role, status, group);
+        onAdd: (name, username, email, password, phone, role, status, group) {
+          _addUser(name, username, email, password, phone, role, status, group);
         },
-        groupList: _groups.map((g) => g['name'] ?? '').where((g) => g.isNotEmpty).toList(),
+        groupList: _groups.map((g) => g['name'] ?? '').toList(),
       ),
     );
   }
@@ -97,15 +65,17 @@ class _UsersPageState extends State<UsersPage> {
     showDialog(
       context: context,
       builder: (context) => AddUserForm(
-        initialName: user['name'],
+        onAdd: (name, username, email, password, phone, role, status, group) {
+          _editUser(index, name, username, email, password, phone, role, status, group);
+        },
+        initialUsername: user['username'],
         initialEmail: user['email'],
+        initialPassword: user['password'],
+        initialPhone: user['phone'],
         initialRole: user['role'],
         initialStatus: user['status'],
         initialGroup: user['group'],
-        onAdd: (name, email, role, status, group) {
-          _editUser(index, name, email, role, status, group);
-        },
-        groupList: _groups.map((g) => g['name'] ?? '').where((g) => g.isNotEmpty).toList(),
+        groupList: _groups.map((g) => g['name'] ?? '').toList(),
       ),
     );
   }
@@ -216,7 +186,7 @@ class _UsersPageState extends State<UsersPage> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(user['name'] ?? '', style: CommonTextStyles.cardTitle.copyWith(color: CommonColors.textPrimary)),
+                                      Text(user['username'] ?? '', style: CommonTextStyles.cardTitle.copyWith(color: CommonColors.textPrimary)),
                                       const SizedBox(height: 2),
                                       Text(user['email'] ?? '', style: CommonTextStyles.cardTitle.copyWith(color: CommonColors.textSecondary, fontSize: 15)),
                                     ],
@@ -274,5 +244,26 @@ class _UsersPageState extends State<UsersPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Optionally, initialize with some dummy data
+    _groups = [
+      {'name': 'Group A', 'description': 'First group'},
+      {'name': 'Group B', 'description': 'Second group'},
+    ];
+    users = [
+      {
+        'username': 'johndoe',
+        'email': 'john@example.com',
+        'password': 'password',
+        'phone': '1234567890',
+        'role': 'Admin',
+        'status': 'Active',
+        'group': 'Group A',
+      },
+    ];
   }
 }

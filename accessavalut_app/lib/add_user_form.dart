@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AddUserForm extends StatefulWidget {
-  final void Function(String name, String email, String role, String status, String group)? onAdd;
+  final void Function(String name, String username, String email, String password, String phone, String role, String status, String group)? onAdd;
   final String? initialName;
+  final String? initialUsername;
   final String? initialEmail;
+  final String? initialPassword;
+  final String? initialPhone;
   final String? initialRole;
   final String? initialStatus;
   final String? initialGroup;
   final List<String> groupList;
-  const AddUserForm({Key? key, this.onAdd, this.initialName, this.initialEmail, this.initialRole, this.initialStatus, this.initialGroup, required this.groupList}) : super(key: key);
+  const AddUserForm({Key? key, this.onAdd, this.initialName, this.initialUsername, this.initialEmail, this.initialPassword, this.initialPhone, this.initialRole, this.initialStatus, this.initialGroup, required this.groupList}) : super(key: key);
 
   @override
   State<AddUserForm> createState() => _AddUserFormState();
@@ -17,7 +20,10 @@ class AddUserForm extends StatefulWidget {
 class _AddUserFormState extends State<AddUserForm> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
+  late TextEditingController _usernameController;
   late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+  late TextEditingController _phoneController;
   late String _role;
   late String _status;
   late String _group;
@@ -26,7 +32,10 @@ class _AddUserFormState extends State<AddUserForm> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.initialName ?? '');
+    _usernameController = TextEditingController(text: widget.initialUsername ?? '');
     _emailController = TextEditingController(text: widget.initialEmail ?? '');
+    _passwordController = TextEditingController(text: widget.initialPassword ?? '');
+    _phoneController = TextEditingController(text: widget.initialPhone ?? '');
     _role = widget.initialRole ?? 'User';
     _status = widget.initialStatus ?? 'Active';
     _group = widget.initialGroup ?? (widget.groupList.isNotEmpty ? widget.groupList[0] : '');
@@ -34,243 +43,158 @@ class _AddUserFormState extends State<AddUserForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500, minWidth: 300, maxHeight: 600),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    'Add User',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0A2B4B),
-                    ),
+                  Text(
+                    widget.initialUsername == null ? 'Add User' : 'Edit User',
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Color(0xFF0A2B4B)),
-                    onPressed: () => Navigator.of(context).pop(),
-                    tooltip: 'Back',
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              const Text('Name', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF374151))),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-                ),
-                validator: (value) => value == null || value.isEmpty ? 'Enter name' : null,
-              ),
-              const SizedBox(height: 24),
-              const Text('Email', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF374151))),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-                ),
-                validator: (value) => value == null || value.isEmpty ? 'Enter email' : null,
-              ),
-              const SizedBox(height: 24),
-              const Text('Role', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF374151))),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: _role,
-                items: const [
-                  DropdownMenuItem(value: 'User', child: Text('User')),
-                  DropdownMenuItem(value: 'Admin', child: Text('Admin')),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _role = value ?? 'User';
-                  });
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text('Status', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF374151))),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: _status,
-                items: const [
-                  DropdownMenuItem(value: 'Active', child: Text('Active')),
-                  DropdownMenuItem(value: 'Inactive', child: Text('Inactive')),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _status = value ?? 'Active';
-                  });
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text('Group', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF374151))),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: _group.isNotEmpty ? _group : null,
-                items: widget.groupList.map((g) => DropdownMenuItem(value: g, child: Text(g))).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _group = value ?? (widget.groupList.isNotEmpty ? widget.groupList[0] : '');
-                  });
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text('Role', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF374151))),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: _role,
-                items: const [
-                  DropdownMenuItem(value: 'User', child: Text('User')),
-                  DropdownMenuItem(value: 'Admin', child: Text('Admin')),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _role = value ?? 'User';
-                  });
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text('Status', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF374151))),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: _status,
-                items: const [
-                  DropdownMenuItem(value: 'Active', child: Text('Active')),
-                  DropdownMenuItem(value: 'Inactive', child: Text('Inactive')),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _status = value ?? 'Active';
-                  });
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-                ),
-              ),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0A2B4B),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        widget.onAdd?.call(
-                          _nameController.text,
-                          _emailController.text,
-                          _role,
-                          _status,
-                          _group,
-                        );
-                        Navigator.of(context).pop();
+                  const SizedBox(height: 24),
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(labelText: 'Name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a name';
                       }
+                      return null;
                     },
-                    child: Text(widget.initialName != null ? 'Update User' : 'Add User', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(labelText: 'Username'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a username';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(labelText: 'Email'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter an email';
+                      }
+                      if (!RegExp(r'^.+@.+\..+$').hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(labelText: 'Password'),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a password';
+                      }
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _phoneController,
+                    decoration: const InputDecoration(labelText: 'Phone'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a phone number';
+                      }
+                      if (!RegExp(r'^[0-9+\- ]{7,15}$').hasMatch(value)) {
+                        return 'Please enter a valid phone number';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    value: _role,
+                    decoration: const InputDecoration(labelText: 'Role'),
+                    items: ['User', 'Admin', 'Manager']
+                        .map((role) => DropdownMenuItem(value: role, child: Text(role)))
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null) setState(() => _role = value);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    value: _status,
+                    decoration: const InputDecoration(labelText: 'Status'),
+                    items: ['Active', 'Inactive']
+                        .map((status) => DropdownMenuItem(value: status, child: Text(status)))
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null) setState(() => _status = value);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    value: _group,
+                    decoration: const InputDecoration(labelText: 'Group'),
+                    items: widget.groupList
+                        .map((group) => DropdownMenuItem(value: group, child: Text(group)))
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null) setState(() => _group = value);
+                    },
+                  ),
+                  const SizedBox(height: 32),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Cancel'),
+                      ),
+                      const SizedBox(width: 16),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            try {
+                              widget.onAdd?.call(
+                                _nameController.text.trim(),
+                                _usernameController.text.trim(),
+                                _emailController.text.trim(),
+                                _passwordController.text.trim(),
+                                _phoneController.text.trim(),
+                                _role,
+                                _status,
+                                _group,
+                              );
+                              Navigator.of(context).pop();
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Failed to save user: $e')),
+                              );
+                            }
+                          }
+                        },
+                        child: Text(widget.initialUsername == null ? 'Add' : 'Save'),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),

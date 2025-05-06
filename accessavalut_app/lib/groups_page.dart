@@ -3,6 +3,7 @@ import 'add_group_page.dart';
 import 'common_colors.dart';
 import 'common_text_styles.dart';
 import 'reusable_widgets.dart';
+import 'backend/groups_api.dart';
 
 class GroupsPage extends StatefulWidget {
   const GroupsPage({Key? key}) : super(key: key);
@@ -12,17 +13,26 @@ class GroupsPage extends StatefulWidget {
 }
 
 class _GroupsPageState extends State<GroupsPage> {
-  List<Map<String, String>> _groups = [
-    {'name': 'Marketing', 'description': 'Marketing Team'},
-    {'name': 'Sales', 'description': 'Sales Team'},
-    {'name': 'Development', 'description': 'Development Team'},
-    {'name': 'Support', 'description': 'Support Team'},
-  ];
+  List<Map<String, String>> _groups = [];
 
   @override
   void initState() {
     super.initState();
-    // No need to load groups from storage
+    _loadGroups();
+  }
+
+  Future<void> _loadGroups() async {
+    try {
+      final api = GroupsApiService();
+      final fetchedGroups = await api.fetchGroups();
+      setState(() {
+        _groups = fetchedGroups.map((g) => {'name': g.name, 'description': g.description}).toList();
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load groups: $e')),
+      );
+    }
   }
 
   @override
@@ -72,9 +82,9 @@ class _GroupsPageState extends State<GroupsPage> {
                               MaterialPageRoute(builder: (context) => const AddGroupPage()),
                             );
                             if (result != null && result is Map<String, String>) {
-                              setState(() {
-                                _groups.add(result);
-                              });
+                              final api = GroupsApiService();
+                              await api.addGroup(GroupRequest(name: result['name']!, description: result['description']!));
+                              _loadGroups();
                             }
                           },
                         ),
@@ -114,7 +124,87 @@ class _GroupsPageState extends State<GroupsPage> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-          child: Text(description, style: const TextStyle(fontSize: 17, color: Color(0xFF6B7280))),
+          child: Row(
+            children: [
+              Text(description, style: const TextStyle(fontSize: 17, color: Color(0xFF6B7280))),
+              const SizedBox(width: 12),
+              Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.edit, color: Color(0xFF2563EB)),
+                  tooltip: 'Edit',
+                  onPressed: () async {
+                    final result = await showDialog<Map<String, String>>(
+                      context: context,
+                      builder: (context) {
+                        final TextEditingController nameController = TextEditingController(text: name);
+                        final TextEditingController descController = TextEditingController(text: description);
+                        return Dialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          child: SizedBox(
+                            width: 500,
+                            child: Padding(
+                              padding: const EdgeInsets.all(32),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text('Edit Group', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                                  const SizedBox(height: 24),
+                                  const Text('Group Name', style: TextStyle(fontSize: 18)),
+                                  const SizedBox(height: 8),
+                                  TextField(
+                                    controller: nameController,
+                                    decoration: const InputDecoration(hintText: 'Enter group name'),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  const Text('Description', style: TextStyle(fontSize: 18)),
+                                  const SizedBox(height: 8),
+                                  TextField(
+                                    controller: descController,
+                                    decoration: const InputDecoration(hintText: 'Enter group description'),
+                                  ),
+                                  const SizedBox(height: 24),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop({
+                                            'name': nameController.text,
+                                            'description': descController.text,
+                                          });
+                                        },
+                                        child: const Text('Save'),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      TextButton(
+                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: const Text('Cancel'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                    if (result != null) {
+                      // TODO: Save updated group to backend and refresh UI
+                    }
+                  },
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete, color: Color(0xFFB91C1C)),
+                tooltip: 'Delete',
+                onPressed: () {
+                  // TODO: Implement delete group logic
+                },
+              ),
+            ],
+          ),
         ),
       ],
     );
