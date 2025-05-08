@@ -8,6 +8,11 @@ import 'backend/groups_api.dart';
 class GroupsPage extends StatefulWidget {
   const GroupsPage({Key? key}) : super(key: key);
 
+  static int getGroupCount(BuildContext context) {
+    final state = context.findAncestorStateOfType<_GroupsPageState>();
+    return state?._groups.length ?? 0;
+  }
+
   @override
   _GroupsPageState createState() => _GroupsPageState();
 }

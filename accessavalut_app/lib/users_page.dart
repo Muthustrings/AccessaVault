@@ -6,6 +6,11 @@ import 'reusable_widgets.dart';
 class UsersPage extends StatefulWidget {
   const UsersPage({super.key});
 
+  static int getUserCount(BuildContext context) {
+    final state = context.findAncestorStateOfType<_UsersPageState>();
+    return state?.users.length ?? 0;
+  }
+
   @override
   State<UsersPage> createState() => _UsersPageState();
 }
@@ -13,8 +18,9 @@ class UsersPage extends StatefulWidget {
 class _UsersPageState extends State<UsersPage> {
   List<Map<String, String>> users = [];
   List<Map<String, String>> _groups = [];
+  List<String> _roles = ['Admin', 'User', 'Manager'];
 
-  void _addUser(String name, String username, String email, String password, String phone, String role, String status, String group) {
+  void _addUser(String username, String email, String password, String phone, String role, String status, String group) {
     setState(() {
       users.add({
         'username': username,
@@ -28,7 +34,7 @@ class _UsersPageState extends State<UsersPage> {
     });
   }
 
-  void _editUser(int index, String name, String username, String email, String password, String phone, String role, String status, String group) {
+  void _editUser(int index, String username, String email, String password, String phone, String role, String status, String group) {
     setState(() {
       users[index] = {
         'username': username,
@@ -52,10 +58,11 @@ class _UsersPageState extends State<UsersPage> {
     showDialog(
       context: context,
       builder: (context) => AddUserForm(
-        onAdd: (name, username, email, password, phone, role, status, group) {
-          _addUser(name, username, email, password, phone, role, status, group);
+        onAdd: (username, email, password, phone, role, status, group) {
+          _addUser(username, email, password, phone, role, status, group);
         },
         groupList: _groups.map((g) => g['name'] ?? '').toList(),
+        roleList: _roles,
       ),
     );
   }
@@ -65,8 +72,8 @@ class _UsersPageState extends State<UsersPage> {
     showDialog(
       context: context,
       builder: (context) => AddUserForm(
-        onAdd: (name, username, email, password, phone, role, status, group) {
-          _editUser(index, name, username, email, password, phone, role, status, group);
+        onAdd: (username, email, password, phone, role, status, group) {
+          _editUser(index, username, email, password, phone, role, status, group);
         },
         initialUsername: user['username'],
         initialEmail: user['email'],
@@ -76,6 +83,7 @@ class _UsersPageState extends State<UsersPage> {
         initialStatus: user['status'],
         initialGroup: user['group'],
         groupList: _groups.map((g) => g['name'] ?? '').toList(),
+        roleList: _roles,
       ),
     );
   }

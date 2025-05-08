@@ -100,7 +100,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         );
                         if (shouldLogout == true) {
-                          // Ensure dialog is closed before navigating
                           Navigator.of(context, rootNavigator: true).pushReplacementNamed('/login');
                         }
                       },
@@ -112,10 +111,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           // Main Area
           Expanded(
-            child: IndexedStack(
-              index: _selectedIndex,
-              children: _pages, // <-- Use the _pages list here!
-            ),
+            child: _pages[_selectedIndex],
           ),
         ],
       ),
@@ -156,64 +152,34 @@ class _SidebarItem extends StatelessWidget {
 class _DashboardMainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    int totalUsers = 4;
-    int activeUsers = 0;
-    int totalRoles = 4;
-    int totalGroups = 4;
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isNarrow = constraints.maxWidth < 900;
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: constraints.maxWidth),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 32),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Dashboard',
-                        style: CommonTextStyles.heading1,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
-                  isNarrow
-                      ? SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              _StatCard(title: 'TOTAL USERS', value: totalUsers.toString()),
-                              const SizedBox(width: 16),
-                              _StatCard(title: 'ACTIVE USERS', value: activeUsers.toString()),
-                              const SizedBox(width: 16),
-                              _StatCard(title: 'ROLES', value: totalRoles.toString()),
-                              const SizedBox(width: 16),
-                              _StatCard(title: 'GROUPS', value: totalGroups.toString()),
-                            ],
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _StatCard(title: 'TOTAL USERS', value: totalUsers.toString()),
-                            _StatCard(title: 'ACTIVE USERS', value: activeUsers.toString()),
-                            _StatCard(title: 'ROLES', value: totalRoles.toString()),
-                            _StatCard(title: 'GROUPS', value: totalGroups.toString()),
-                          ],
-                        ),
-                ],
+    // Revert to original static content (example: hardcoded values)
+    return Padding(
+      padding: const EdgeInsets.all(48),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Dashboard', style: CommonTextStyles.heading1),
+          const SizedBox(height: 32),
+          Row(
+            children: [
+              _StatCard(
+                title: 'Users',
+                value: '0',
               ),
-            ),
+              const SizedBox(width: 24),
+              _StatCard(
+                title: 'Roles',
+                value: '0',
+              ),
+              const SizedBox(width: 24),
+              _StatCard(
+                title: 'Groups',
+                value: '0',
+              ),
+            ],
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }

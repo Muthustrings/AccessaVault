@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AddUserForm extends StatefulWidget {
-  final void Function(String name, String username, String email, String password, String phone, String role, String status, String group)? onAdd;
-  final String? initialName;
+  final void Function(String username, String email, String password, String phone, String role, String status, String group)? onAdd;
   final String? initialUsername;
   final String? initialEmail;
   final String? initialPassword;
@@ -11,7 +10,8 @@ class AddUserForm extends StatefulWidget {
   final String? initialStatus;
   final String? initialGroup;
   final List<String> groupList;
-  const AddUserForm({Key? key, this.onAdd, this.initialName, this.initialUsername, this.initialEmail, this.initialPassword, this.initialPhone, this.initialRole, this.initialStatus, this.initialGroup, required this.groupList}) : super(key: key);
+  final List<String> roleList;
+  const AddUserForm({Key? key, this.onAdd, this.initialUsername, this.initialEmail, this.initialPassword, this.initialPhone, this.initialRole, this.initialStatus, this.initialGroup, required this.groupList, required this.roleList}) : super(key: key);
 
   @override
   State<AddUserForm> createState() => _AddUserFormState();
@@ -19,7 +19,6 @@ class AddUserForm extends StatefulWidget {
 
 class _AddUserFormState extends State<AddUserForm> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _nameController;
   late TextEditingController _usernameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
@@ -31,12 +30,11 @@ class _AddUserFormState extends State<AddUserForm> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.initialName ?? '');
     _usernameController = TextEditingController(text: widget.initialUsername ?? '');
     _emailController = TextEditingController(text: widget.initialEmail ?? '');
     _passwordController = TextEditingController(text: widget.initialPassword ?? '');
     _phoneController = TextEditingController(text: widget.initialPhone ?? '');
-    _role = widget.initialRole ?? 'User';
+    _role = widget.initialRole ?? (widget.roleList.isNotEmpty ? widget.roleList[0] : '');
     _status = widget.initialStatus ?? 'Active';
     _group = widget.initialGroup ?? (widget.groupList.isNotEmpty ? widget.groupList[0] : '');
   }
@@ -60,17 +58,6 @@ class _AddUserFormState extends State<AddUserForm> {
                     style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 24),
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(labelText: 'Name'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a name';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _usernameController,
                     decoration: const InputDecoration(labelText: 'Username'),
@@ -128,7 +115,7 @@ class _AddUserFormState extends State<AddUserForm> {
                   DropdownButtonFormField<String>(
                     value: _role,
                     decoration: const InputDecoration(labelText: 'Role'),
-                    items: ['User', 'Admin', 'Manager']
+                    items: widget.roleList
                         .map((role) => DropdownMenuItem(value: role, child: Text(role)))
                         .toList(),
                     onChanged: (value) {
@@ -171,7 +158,6 @@ class _AddUserFormState extends State<AddUserForm> {
                           if (_formKey.currentState!.validate()) {
                             try {
                               widget.onAdd?.call(
-                                _nameController.text.trim(),
                                 _usernameController.text.trim(),
                                 _emailController.text.trim(),
                                 _passwordController.text.trim(),

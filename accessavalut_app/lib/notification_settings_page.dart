@@ -14,7 +14,16 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Removed AppBar
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF9FAFB),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF195A8C)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const Text('Notifications', style: TextStyle(fontSize: 28, color: Color(0xFF374151), fontWeight: FontWeight.bold)),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),

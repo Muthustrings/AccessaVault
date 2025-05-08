@@ -75,6 +75,59 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    if (args != null && args['logoutSuccess'] == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            contentPadding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.check_circle, color: Colors.green, size: 60),
+                const SizedBox(height: 16),
+                const Text(
+                  'Logged out successfully!',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF0A2B4B)),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'You have been logged out of AccessaVault.',
+                  style: TextStyle(fontSize: 16, color: Color(0xFF374151)),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0A2B4B),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Close',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      });
+    }
+  }
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -231,6 +284,53 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           Navigator.of(context).pushReplacementNamed('/dashboard');
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                contentPadding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.check_circle, color: Colors.green, size: 60),
+                                    const SizedBox(height: 16),
+                                    const Text(
+                                      'Login Successful!',
+                                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF0A2B4B)),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'Welcome to AccessaVault.',
+                                      style: TextStyle(fontSize: 16, color: Color(0xFF374151)),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 24),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color(0xFF0A2B4B),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text(
+                                          'Close',
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
                         }
                       },
                       child: const Text(

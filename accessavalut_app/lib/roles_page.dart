@@ -6,6 +6,11 @@ import 'common_colors.dart';
 class RolesPage extends StatefulWidget {
   const RolesPage({Key? key}) : super(key: key);
 
+  static int getRoleCount(BuildContext context) {
+    final state = context.findAncestorStateOfType<_RolesPageState>();
+    return state?._roles.length ?? 0;
+  }
+
   @override
   State<RolesPage> createState() => _RolesPageState();
 }
