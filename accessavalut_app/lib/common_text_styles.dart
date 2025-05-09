@@ -1,40 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CommonTextStyles {
-  static const TextStyle heading1 = TextStyle(
-    fontSize: 48,
-    fontWeight: FontWeight.bold,
-    color: Color(0xFF0A2B4B),
-  );
-  static const TextStyle heading2 = TextStyle(
-    fontSize: 32,
-    fontWeight: FontWeight.bold,
-    color: Color(0xFF0A2B4B),
-  );
-  static const TextStyle cardTitle = TextStyle(
-    color: Color(0xFF6B7280),
-    fontWeight: FontWeight.w600,
-    fontSize: 18,
-  );
-  static const TextStyle cardValue = TextStyle(
-    color: Color(0xFF0A2B4B),
-    fontWeight: FontWeight.bold,
-    fontSize: 40,
-  );
-  static const TextStyle sidebarTitle = TextStyle(
-    color: Colors.white,
-    fontSize: 24,
-    fontWeight: FontWeight.bold,
-    overflow: TextOverflow.ellipsis,
-  );
-  static const TextStyle sidebarItem = TextStyle(
-    color: Colors.white,
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-  );
-  static const TextStyle logout = TextStyle(
-    color: Colors.white,
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-  );
+  static TextStyle heading1(BuildContext context) => Theme.of(context).textTheme.displayLarge ?? const TextStyle(fontSize: 48, fontWeight: FontWeight.bold);
+  static TextStyle heading2(BuildContext context) => Theme.of(context).textTheme.headlineLarge ?? const TextStyle(fontSize: 32, fontWeight: FontWeight.bold);
+  static TextStyle cardTitle(BuildContext context) => Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontWeight: FontWeight.w600, fontSize: 18);
+  static TextStyle cardValue(BuildContext context) => Theme.of(context).textTheme.displayMedium ?? const TextStyle(fontWeight: FontWeight.bold, fontSize: 40);
+  static TextStyle sidebarTitle(BuildContext context) => Theme.of(context).textTheme.titleLarge ?? const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
+  static TextStyle sidebarItem(BuildContext context) => Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
+  static TextStyle logout(BuildContext context) => Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
 }

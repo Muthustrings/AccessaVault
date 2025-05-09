@@ -26,15 +26,15 @@ class _AddRolePageState extends State<AddRolePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: CommonColors.card(context),
       appBar: AppBar(
-        backgroundColor: CommonColors.card,
+        backgroundColor: CommonColors.card(context),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: CommonColors.primary),
+          icon: Icon(Icons.arrow_back, color: CommonColors.primary(context)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Add Role', style: CommonTextStyles.heading2),
+        title: Text('Add Role', style: CommonTextStyles.heading2(context)),
         centerTitle: true,
       ),
       body: Center(
@@ -44,7 +44,7 @@ class _AddRolePageState extends State<AddRolePage> {
             child: Container(
               width: 500,
               decoration: BoxDecoration(
-                color: CommonColors.card,
+                color: CommonColors.card(context),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -59,14 +59,14 @@ class _AddRolePageState extends State<AddRolePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Role Name', style: CommonTextStyles.cardTitle),
+                    Text('Role Name', style: CommonTextStyles.cardTitle(context)),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _roleNameController,
                       decoration: InputDecoration(
                         hintText: 'Enter role name',
                         filled: true,
-                        fillColor: CommonColors.accent,
+                        fillColor: CommonColors.accent(context),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,
@@ -75,14 +75,14 @@ class _AddRolePageState extends State<AddRolePage> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    const Text('Description', style: CommonTextStyles.cardTitle),
+                    Text('Description', style: CommonTextStyles.cardTitle(context)),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _descController,
                       decoration: InputDecoration(
                         hintText: 'Enter role description',
                         filled: true,
-                        fillColor: CommonColors.accent,
+                        fillColor: CommonColors.accent(context),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,
@@ -91,7 +91,7 @@ class _AddRolePageState extends State<AddRolePage> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    const Text('Permissions', style: CommonTextStyles.cardTitle),
+                    Text('Permissions', style: CommonTextStyles.cardTitle(context)),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
                       value: _selectedPermission,
@@ -108,7 +108,7 @@ class _AddRolePageState extends State<AddRolePage> {
                       },
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: CommonColors.accent,
+                        fillColor: CommonColors.accent(context),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,

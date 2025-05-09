@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'common_colors.dart';
+import 'common_text_styles.dart';
 
 class GeneralSettingsPage extends StatefulWidget {
   const GeneralSettingsPage({Key? key}) : super(key: key);
@@ -30,15 +32,15 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: CommonColors.accent(context),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: CommonColors.card(context),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF0A2B4B)),
+          icon: Icon(Icons.arrow_back, color: CommonColors.primary(context)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('General', style: TextStyle(color: Color(0xFF0A2B4B), fontWeight: FontWeight.bold)),
+        title: Text('General', style: CommonTextStyles.heading2(context)),
         centerTitle: true,
       ),
       body: Center(
@@ -48,11 +50,11 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
             child: Container(
               width: 500,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: CommonColors.card(context),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: CommonColors.shadow(context),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),

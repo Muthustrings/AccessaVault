@@ -35,15 +35,15 @@ class _AddUserPageState extends State<AddUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: CommonColors.card(context),
       appBar: AppBar(
-        backgroundColor: CommonColors.card,
+        backgroundColor: CommonColors.card(context),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: CommonColors.primary),
+          icon: Icon(Icons.arrow_back, color: CommonColors.primary(context)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Add User', style: CommonTextStyles.heading2),
+        title: Text('Add User', style: CommonTextStyles.heading2(context)),
         centerTitle: true,
       ),
       body: Center(
@@ -53,11 +53,11 @@ class _AddUserPageState extends State<AddUserPage> {
             child: Container(
               width: 500,
               decoration: BoxDecoration(
-                color: CommonColors.card,
+                color: CommonColors.card(context),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: CommonColors.shadow,
+                    color: CommonColors.shadow(context),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -71,7 +71,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text('Add User', style: CommonTextStyles.heading2, textAlign: TextAlign.center),
+                      Text('Add User', style: CommonTextStyles.heading2(context), textAlign: TextAlign.center),
                       const SizedBox(height: 32),
                       TextFormField(
                         controller: _usernameController,
@@ -128,9 +128,9 @@ class _AddUserPageState extends State<AddUserPage> {
                           height: 48,
                           child: ReusableElevatedButton(
                             text: 'Add',
-                            backgroundColor: CommonColors.primary,
+                            backgroundColor: CommonColors.primary(context),
                             borderRadius: 8,
-                            textStyle: CommonTextStyles.cardTitle,
+                            textStyle: CommonTextStyles.cardTitle(context),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 if (widget.onAdd != null) {

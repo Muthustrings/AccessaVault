@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'dashboard.dart';
+import'common_colors.dart';
+
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -12,18 +14,18 @@ class SignUpScreen extends StatelessWidget {
     final TextEditingController _passwordController = TextEditingController();
     final TextEditingController _nameController = TextEditingController();
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: CommonColors.accent(context),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
             width: 400,
             padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 32),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: CommonColors.card(context),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: CommonColors.shadow(context),
                   blurRadius: 20,
                   spreadRadius: 2,
                   offset: const Offset(0, 8),

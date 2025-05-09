@@ -24,15 +24,15 @@ class _AddGroupPageState extends State<AddGroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: CommonColors.accent(context),
       appBar: AppBar(
-        backgroundColor: CommonColors.card,
+        backgroundColor: CommonColors.card(context),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: CommonColors.primary),
+          icon: Icon(Icons.arrow_back, color: CommonColors.primary(context)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Add Group', style: CommonTextStyles.heading2),
+        title: Text('Add Group', style: CommonTextStyles.heading2(context)),
         centerTitle: true,
       ),
       body: Center(
@@ -42,7 +42,7 @@ class _AddGroupPageState extends State<AddGroupPage> {
             child: Container(
               width: 500,
               decoration: BoxDecoration(
-                color: CommonColors.card,
+                color: CommonColors.card(context),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -57,14 +57,14 @@ class _AddGroupPageState extends State<AddGroupPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Group Name', style: CommonTextStyles.cardTitle),
+                    Text('Group Name', style: CommonTextStyles.cardTitle(context)),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _nameController,
                       decoration: InputDecoration(
                         hintText: 'Enter group name',
                         filled: true,
-                        fillColor: CommonColors.accent,
+                        fillColor: CommonColors.accent(context),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,
@@ -73,14 +73,14 @@ class _AddGroupPageState extends State<AddGroupPage> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    const Text('Description', style: CommonTextStyles.cardTitle),
+                    Text('Description', style: CommonTextStyles.cardTitle(context)),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _descController,
                       decoration: InputDecoration(
                         hintText: 'Enter group description',
                         filled: true,
-                        fillColor: CommonColors.accent,
+                        fillColor: CommonColors.accent(context),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,

@@ -70,7 +70,7 @@ class _RolesPageState extends State<RolesPage> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: CommonColors.primary,
+              backgroundColor: CommonColors.primary(context),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
             onPressed: () async {
@@ -164,7 +164,7 @@ class _RolesPageState extends State<RolesPage> {
                 const Text('Roles', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFF0A2B4B))),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: CommonColors.primary,
+                    backgroundColor: CommonColors.primary(context),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
                   ),
@@ -185,10 +185,10 @@ class _RolesPageState extends State<RolesPage> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: CommonColors.card,
+                    color: CommonColors.card(context),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
-                      BoxShadow(color: CommonColors.shadow, blurRadius: 8, offset: const Offset(0, 2)),
+                      BoxShadow(color: CommonColors.shadow(context), blurRadius: 8, offset: const Offset(0, 2)),
                     ],
                   ),
                   child: _roles.isEmpty

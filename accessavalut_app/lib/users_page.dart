@@ -3,6 +3,7 @@ import 'add_user_form.dart';
 import 'common_colors.dart';
 import 'common_text_styles.dart';
 import 'reusable_widgets.dart';
+
 class UsersPage extends StatefulWidget {
   const UsersPage({super.key});
 
@@ -91,15 +92,15 @@ class _UsersPageState extends State<UsersPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: CommonColors.accent,
+      color: CommonColors.accent(context),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Users',
-              style: CommonTextStyles.heading1,
+              style: CommonTextStyles.heading1(context),
             ),
             const SizedBox(height: 32),
             Row(
@@ -107,15 +108,15 @@ class _UsersPageState extends State<UsersPage> {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: CommonColors.card,
+                      color: CommonColors.card(context),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFE5E7EB)),
+                      border: Border.all(color: Colors.black),
                     ),
                     child: Row(
                       children: [
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Icon(Icons.search, color: CommonColors.textSecondary),
+child: Icon(Icons.search, color: Colors.grey),
                         ),
                         Expanded(
                           child: TextField(
@@ -135,9 +136,9 @@ class _UsersPageState extends State<UsersPage> {
                   child: ReusableElevatedButton(
                     text: 'Add User',
                     onPressed: _showAddUserDialog,
-                    backgroundColor: CommonColors.primary,
+                    backgroundColor: CommonColors.primary(context),
                     borderRadius: 8,
-                    textStyle: CommonTextStyles.cardTitle,
+                    textStyle: CommonTextStyles.cardTitle(context),
                   ),
                 ),
               ],
@@ -146,11 +147,11 @@ class _UsersPageState extends State<UsersPage> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: CommonColors.card,
+                  color: CommonColors.card(context),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: CommonColors.shadow,
+                      color: CommonColors.shadow(context),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -163,17 +164,17 @@ class _UsersPageState extends State<UsersPage> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text('Name', style: CommonTextStyles.cardTitle),
+                            child: Text('Name', style: CommonTextStyles.cardTitle(context)),
                           ),
                           const SizedBox(width: 2),
                           Expanded(
                             child: SizedBox(),
                           ),
                           Expanded(
-                            child: Text('Role', style: CommonTextStyles.cardTitle),
+                            child: Text('Role', style: CommonTextStyles.cardTitle(context)),
                           ),
                           Expanded(
-                            child: Text('Status', style: CommonTextStyles.cardTitle),
+                            child: Text('Status', style: CommonTextStyles.cardTitle(context)),
                           ),
                           const SizedBox(width: 48),
                         ],
@@ -194,9 +195,9 @@ class _UsersPageState extends State<UsersPage> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(user['username'] ?? '', style: CommonTextStyles.cardTitle.copyWith(color: CommonColors.textPrimary)),
-                                      const SizedBox(height: 2),
-                                      Text(user['email'] ?? '', style: CommonTextStyles.cardTitle.copyWith(color: CommonColors.textSecondary, fontSize: 15)),
+                                      Text(user['username'] ?? '', style: CommonTextStyles.cardTitle(context).copyWith(color: CommonColors.textPrimary(context))),
+                                      SizedBox(height: 2),
+                                      Text(user['email'] ?? '', style: CommonTextStyles.cardTitle(context).copyWith(color: CommonColors.textSecondary(context), fontSize: 15)),
                                     ],
                                   ),
                                 ),
@@ -208,20 +209,20 @@ class _UsersPageState extends State<UsersPage> {
                                       color: const Color(0xFFF3F4F6),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
-                                    child: Text(user['role'] ?? '', style: CommonTextStyles.cardTitle.copyWith(fontWeight: FontWeight.w500, fontSize: 16)),
+                                    child: Text(user['role'] ?? '', style: CommonTextStyles.cardTitle(context).copyWith(fontWeight: FontWeight.w500, fontSize: 16)),
                                   ),
                                 ),
                                 Expanded(
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                                     decoration: BoxDecoration(
-                                      color: (user['status'] == 'Active') ? const Color(0xFFD1FAE5) : const Color(0xFFF3F4F6),
+                                      color: user['status'] == 'Active' ? const Color(0xFFECFDF5) : const Color(0xFFF3F4F6),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Text(
                                       user['status'] ?? '',
-                                      style: CommonTextStyles.cardTitle.copyWith(
-                                        color: (user['status'] == 'Active') ? const Color(0xFF059669) : CommonColors.textSecondary,
+                                      style: CommonTextStyles.cardTitle(context).copyWith(
+color: (user['status'] == 'Active') ? Colors.green : CommonColors.textSecondary(context),
                                       ),
                                     ),
                                   ),
@@ -229,7 +230,7 @@ class _UsersPageState extends State<UsersPage> {
                                 Row(
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.edit, color: CommonColors.primary),
+                                      icon: Icon(Icons.edit, color: CommonColors.primary(context)),
                                       onPressed: () => _showEditUserDialog(index),
                                     ),
                                     IconButton(

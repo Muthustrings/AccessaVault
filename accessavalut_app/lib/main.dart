@@ -14,8 +14,44 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'AccessaVault',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.light(
+          primary: const Color(0xFF0A2B4B),
+          background: const Color(0xFFF9FAFB),
+          secondary: const Color(0xFF6B7280),
+        ),
+        cardColor: Colors.white,
+        shadowColor: const Color(0x1A000000),
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Color(0xFF0A2B4B)),
+          headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Color(0xFF0A2B4B)),
+          titleMedium: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFF6B7280)),
+          displayMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, color: Color(0xFF0A2B4B)),
+          bodyLarge: TextStyle(color: Color(0xFF0A2B4B)),
+          bodyMedium: TextStyle(color: Color(0xFF6B7280)),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF0A2B4B)),
+        highlightColor: const Color(0x1A000000),
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.dark(
+          primary: const Color(0xFF90CAF9),
+          background: const Color(0xFF181A20),
+          secondary: const Color(0xFFB0BEC5),
+        ),
+        cardColor: const Color(0xFF23272F),
+        shadowColor: Colors.black.withOpacity(0.5),
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white),
+          headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+          titleMedium: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Color(0xFFB0BEC5)),
+          displayMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, color: Colors.white),
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Color(0xFFB0BEC5)),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        highlightColor: Colors.white24,
+      ),
+      themeMode: ThemeMode.system,
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
@@ -171,16 +207,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFF0A2B4B),
+                          color: Colors.white,
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(10),
                         child: const Text(
                           'A',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
+                            fontFamily: 'Montserrat',
                           ),
                         ),
                       ),
@@ -190,7 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF0A2B4B),
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -202,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF0A2B4B),
+                      color: Colors.black,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -211,12 +248,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
-                      color: Color(0xFF374151),
+                      color: Colors.black,
                     ),
                   ),
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _emailController,
+                    style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       hintText: 'Email Address',
                       border: OutlineInputBorder(
@@ -239,6 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
+                    style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       hintText: 'Password',
                       border: OutlineInputBorder(
@@ -262,7 +301,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Checkbox(value: false, onChanged: (_) {}),
                       const Text(
                         'Remember me',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: TextStyle(color: Colors.black),
                       ),
                       const Spacer(),
                       TextButton(
@@ -322,7 +361,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         },
                                         child: const Text(
                                           'Close',
-                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                                         ),
                                       ),
                                     ),

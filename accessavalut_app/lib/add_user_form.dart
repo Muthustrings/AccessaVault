@@ -55,7 +55,7 @@ class _AddUserFormState extends State<AddUserForm> {
                 children: [
                   Text(
                     widget.initialUsername == null ? 'Add User' : 'Edit User',
-                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   const SizedBox(height: 24),
                   TextFormField(

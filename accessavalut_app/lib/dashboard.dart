@@ -30,13 +30,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CommonColors.card,
+      backgroundColor: CommonColors.card(context),
       body: Row(
         children: [
           // Sidebar
           Container(
             width: 260,
-            color: CommonColors.sidebarBg,
+            color: CommonColors.sidebarBg(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -46,20 +46,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       Container(
                         decoration: const BoxDecoration(
-                          color: CommonColors.card,
+                          color: Colors.white,
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(10),
                         child: const Text(
                           'A',
-                          style: CommonTextStyles.heading2,
+                          style: TextStyle(
+                            color: Color(0xFF0A2B4B),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       const Flexible(
                         child: Text(
-                          'AccessaValut',
-                          style: CommonTextStyles.sidebarTitle,
+                          'AccessaVault',
+                          style: TextStyle(
+                            color: Color(0xFF0A2B4B),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
@@ -77,8 +85,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: ListTile(
-                      leading: const Icon(Icons.logout, color: CommonColors.logoutIcon),
-                      title: const Text('Logout', style: CommonTextStyles.logout),
+                      leading: Icon(Icons.logout, color: CommonColors.logoutIcon(context)),
+                      title: Text('Logout', style: CommonTextStyles.logout(context)),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                       onTap: () async {
                         final shouldLogout = await showDialog<bool>(
@@ -140,7 +148,7 @@ class _SidebarItem extends StatelessWidget {
         leading: Icon(icon, color: Colors.white, size: 26),
         title: Text(
           label,
-          style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 8),
         onTap: onTap,
@@ -158,7 +166,7 @@ class _DashboardMainContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Dashboard', style: CommonTextStyles.heading1),
+Text('Dashboard', style: CommonTextStyles.heading1(context)),
           const SizedBox(height: 32),
           Row(
             children: [
@@ -197,11 +205,11 @@ class _StatCard extends StatelessWidget {
       // height: 120,
       constraints: BoxConstraints(minHeight: 100),
       decoration: BoxDecoration(
-        color: CommonColors.card,
+        color: CommonColors.card(context),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: CommonColors.shadow,
+            color: CommonColors.shadow(context),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -215,13 +223,13 @@ class _StatCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: CommonTextStyles.cardTitle,
+            style: CommonTextStyles.cardTitle(context),
           ),
           const SizedBox(height: 10),
           Flexible(
             child: Text(
               value,
-              style: CommonTextStyles.cardValue,
+              style: CommonTextStyles.cardValue(context),
               overflow: TextOverflow.ellipsis,
             ),
           ),

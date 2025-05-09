@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'add_group_page.dart';
-import 'common_colors.dart';
 import 'common_text_styles.dart';
 import 'reusable_widgets.dart';
 import 'backend/groups_api.dart';
@@ -43,7 +42,7 @@ class _GroupsPageState extends State<GroupsPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFF9FAFB),
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 40),
         child: Column(
@@ -51,14 +50,14 @@ class _GroupsPageState extends State<GroupsPage> {
           children: [
             // Removed logo and title Row here
             const SizedBox(height: 32),
-            const Text(
+            Text(
               'Groups',
-              style: CommonTextStyles.heading1,
+              style: Theme.of(context).textTheme.displayLarge ?? CommonTextStyles.heading1(context),
             ),
             const SizedBox(height: 32),
             Container(
               decoration: BoxDecoration(
-                color: CommonColors.card,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -106,7 +105,7 @@ class _GroupsPageState extends State<GroupsPage> {
                         1: FlexColumnWidth(3),
                       },
                       children: [
-                        ..._groups.map((group) => _groupRow(group['name'] ?? '', group['description'] ?? '')),
+                        ..._groups.map((group) => _groupRow(context, group['name'] ?? '', group['description'] ?? '')),
                       ],
                     ),
                   ],
@@ -119,23 +118,23 @@ class _GroupsPageState extends State<GroupsPage> {
     );
   }
 
-  static TableRow _groupRow(String name, String description) {
+  static TableRow _groupRow(BuildContext context, String name, String description) {
     return TableRow(
       decoration: const BoxDecoration(color: Colors.transparent),
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-          child: Text(name, style: const TextStyle(fontSize: 17, color: Color(0xFF111827), fontWeight: FontWeight.bold)),
+          child: Text(name, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold) ?? const TextStyle(fontSize: 17, color: Color(0xFF111827), fontWeight: FontWeight.bold)),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
           child: Row(
             children: [
-              Text(description, style: const TextStyle(fontSize: 17, color: Color(0xFF6B7280))),
+              Text(description, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).hintColor) ?? const TextStyle(fontSize: 17, color: Color(0xFF6B7280))),
               const SizedBox(width: 12),
               Builder(
                 builder: (context) => IconButton(
-                  icon: const Icon(Icons.edit, color: Color(0xFF2563EB)),
+                  icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
                   tooltip: 'Edit',
                   onPressed: () async {
                     final result = await showDialog<Map<String, String>>(
@@ -153,16 +152,16 @@ class _GroupsPageState extends State<GroupsPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Edit Group', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                                  Text('Edit Group', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold) ?? const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
                                   const SizedBox(height: 24),
-                                  const Text('Group Name', style: TextStyle(fontSize: 18)),
+                                  Text('Group Name', style: Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 18)),
                                   const SizedBox(height: 8),
                                   TextField(
                                     controller: nameController,
                                     decoration: const InputDecoration(hintText: 'Enter group name'),
                                   ),
                                   const SizedBox(height: 16),
-                                  const Text('Description', style: TextStyle(fontSize: 18)),
+                                  Text('Description', style: Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 18)),
                                   const SizedBox(height: 8),
                                   TextField(
                                     controller: descController,
@@ -202,7 +201,7 @@ class _GroupsPageState extends State<GroupsPage> {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.delete, color: Color(0xFFB91C1C)),
+                icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
                 tooltip: 'Delete',
                 onPressed: () {
                   // TODO: Implement delete group logic
